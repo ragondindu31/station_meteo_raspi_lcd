@@ -27,8 +27,6 @@ class GUI_Meteo(tk.Frame):
         self.creer_prevbutton()
         self.creer_exitbutton()
         self.creer_page1()
-        print(PageNbr)
-
 
     #def :defilement du numero de page
     def _nextPage(self):
@@ -38,7 +36,6 @@ class GUI_Meteo(tk.Frame):
             PageNbr = PageNbr+1
         else :
             PageNbr=1
-        PrevPage = PageNbr
         self._changement_page()
     
 
@@ -49,35 +46,22 @@ class GUI_Meteo(tk.Frame):
             PageNbr = NBRE_PAGE_MAX
         else :
             PageNbr=PageNbr-1
-        PrevPage =PageNbr
         self._changement_page()
 
+    #changement de l'affichage de page, pas terrrible peux mieux faire en rajoutant un if avec prevPage
     def _changement_page(self):
-        global PageNbr
-        if PageNbr == 2 :
-            self.page1.grid_forget()
-            #self.page3.grid_forget()
-            self.creer_page2()
-            print(PageNbr)
-        elif PageNbr == 1 : 
-            self.page2.grid_forget()
-            #self.page3.grid_forget()
-            self.creer_page1()
-            print(PageNbr)
+        global PageNbr, PrevPage
 
-    #afficher le texte de la page en cours :
-    # def _afficher_text_P1(frame,PageNbr, prevPage, titrepage1):
-        
-    #     titrepage1.destroy()
-    #     if PageNbr != prevPage :
-    #         texte_page = "page "+ str(PageNbr)+"""
-    #         blabla
-    #         blibli
-    #         """
-    #         prevPage = PageNbr
-        #affichage du texte de page1
-        # titrepage1 = Label(frame, text=texte_page,font = ('Comic Sans MS',30))
-        # titrepage1.grid(padx=30, pady=30)
+        if PrevPage == 1:
+            self.page1.grid_forget()
+        elif PrevPage == 2:
+            self.page2.grid_forget()
+
+        if PageNbr == 2 :
+            self.creer_page2()
+        elif PageNbr == 1 : 
+            self.creer_page1()
+        PrevPage = PageNbr
 
     #mise a jour de l'heure :
     def _maj_heure(self):
@@ -110,13 +94,12 @@ class GUI_Meteo(tk.Frame):
         #import depuis la base sql
         update_data_today = today_data()
         #mise a jour des variables
-        #icon=update_data_today.get("today_icon")
-        myDatetime = datetime.datetime.now()
-        myString = myDatetime.strftime('%H:%M:%S')
+        # myDatetime = datetime.datetime.now()
+        # myString = myDatetime.strftime('%H:%M:%S')
         data_text =f"""
         {datetime.date.today()}
 
-        temperature : {update_data_today.get("temperature")} °C
+        température : {update_data_today.get("temperature")} °C
 
         pression atmos. : {update_data_today.get("pressure")} hPa
 
@@ -221,7 +204,7 @@ class GUI_Meteo(tk.Frame):
         label_icon_M.image = icon_morning #reference mise en memoire essentiel pour affichage en sortie de fonction
 
         #icone de l après midi
-        label_icon_A = Label(self.page2 , width = h_afternoon, height = h_afternoon, image = icon_afternoon  )
+        label_icon_A = Label(self.page2 , width = w_afternoon, height = h_afternoon, image = icon_afternoon  )
         label_icon_A.grid(row = 4, column = column)
         label_icon_A.image = icon_afternoon 
 
@@ -235,11 +218,11 @@ class GUI_Meteo(tk.Frame):
         label_date.grid(row = 2, column= column)
 
         #temperature du matin
-        label_temp_M = Label(self.page2, text = str(temp_morning)+' °C', background = 'WHITE', fg = "black", font = ('Comic Sans MS',10))
+        label_temp_M = Label(self.page2, text = str(temp_morning)+' °C ', background = 'WHITE', fg = "black", font = ('Comic Sans MS',10))
         label_temp_M.grid(row = 3, column = column,sticky = NE)
         
         #temperature de l'apres midi
-        label_temp_A = Label(self.page2, text = (str(temp_afternoon)+' °C'), background = 'WHITE', fg = "black", font = ('Comic Sans MS',10))
+        label_temp_A = Label(self.page2, text = (str(temp_afternoon)+' °C '), background = 'WHITE', fg = "black", font = ('Comic Sans MS',10))
         label_temp_A.grid(row = 4, column = column,sticky = NE)
 
         #icon pour indiqué le moment de la prevision
